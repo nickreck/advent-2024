@@ -30,8 +30,8 @@ func main() {
 		rightSli = append(rightSli, right)
 	}
 
-  sort.Ints(leftSli)
-  sort.Ints(rightSli)
+	sort.Ints(leftSli)
+	sort.Ints(rightSli)
 
 	for i := 0; i < len(leftSli); i++ {
 		distance += absDiffInt(leftSli[i], rightSli[i])
@@ -39,8 +39,8 @@ func main() {
 	fmt.Println(distance)
 }
 func absDiffInt(x, y int) int {
-   if x < y {
-      return y - x
-   }
-   return x - y
+	if x < y {
+		return y - x
+	}
+	return x - y
 }
