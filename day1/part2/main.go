@@ -15,7 +15,7 @@ func main() {
 
 	reader := bufio.NewReader(file)
 
-	distance := 0
+	similarity := 0
 	leftSli := make([]int, 0)
 	rightSli := make([]int, 0)
 	for {
@@ -30,17 +30,18 @@ func main() {
 		rightSli = append(rightSli, right)
 	}
 
-  sort.Sort(sort.IntSlice(leftSli))
-  sort.Sort(sort.IntSlice(rightSli))
+  sort.Ints(leftSli)
+  sort.Ints(rightSli)
 
-	for i := 0; i < len(leftSli); i++ {
-		distance += absDiffInt(leftSli[i], rightSli[i])
+	for _, v := range leftSli {
+		index := sort.SearchInts(rightSli, v)
+    count := 0
+    for index < len(rightSli) && rightSli[index] == v {
+      count++
+      index++
+    }
+    similarity += v * count
 	}
-	fmt.Println(distance)
-}
-func absDiffInt(x, y int) int {
-   if x < y {
-      return y - x
-   }
-   return x - y
+
+	fmt.Println(similarity)
 }
