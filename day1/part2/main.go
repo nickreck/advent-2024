@@ -30,17 +30,17 @@ func main() {
 		rightSli = append(rightSli, right)
 	}
 
-  sort.Ints(leftSli)
-  sort.Ints(rightSli)
+	sort.Ints(leftSli)
+	sort.Ints(rightSli)
 
 	for _, v := range leftSli {
 		index := sort.SearchInts(rightSli, v)
-    count := 0
-    for index < len(rightSli) && rightSli[index] == v {
-      count++
-      index++
-    }
-    similarity += v * count
+		count := 0
+		for index < len(rightSli) && rightSli[index] == v {
+			count++
+			index++
+		}
+		similarity += v * count
 	}
 
 	fmt.Println(similarity)
