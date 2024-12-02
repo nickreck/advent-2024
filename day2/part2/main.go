@@ -27,19 +27,10 @@ func main() {
 			intSli = append(intSli, intV)
 		}
 
-		if !isSafe(&intSli) {
-			for i := 0; i < len(intSli); i++ {
-        test := make([]int, len(intSli))
-        _ = copy(test, intSli)
-				test = append(test[:i], test[i+1:]...)
-				if isSafe(&test) {
-					safe++
-					break
-				}
-			}
-		} else {
-      safe++
-    }
+		index := 0
+		if checkIsSafe(&intSli, &index) {
+			safe++
+		}
 	}
 	fmt.Println(safe)
 }
@@ -51,22 +42,32 @@ func abs(x, y int) int {
 	return y - x
 }
 
-func isSafe(sli *[]int) bool {
-	isDesc := sort.SliceIsSorted(*sli, func(x, y int) bool {
-		return (*sli)[x] > (*sli)[y]
+func checkIsSafe(sli *[]int, index *int) bool {
+	test := make([]int, len(*sli))
+	_ = copy(test, *sli)
+	test = append(test[:*index], test[(*index)+1:]...)
+
+	isDesc := sort.SliceIsSorted(test, func(x, y int) bool {
+		return test[x] > test[y]
 	})
-	isAsc := sort.IntsAreSorted(*sli)
+	isAsc := sort.IntsAreSorted(test)
 
 	if isAsc || isDesc {
-		for i := 1; i < len(*sli); i++ {
-			distance := abs((*sli)[i-1], (*sli)[i])
+		for i := 1; i < len(test); i++ {
+			distance := abs(test[i-1], test[i])
 			if distance < 1 || distance > 3 {
 				break
 			}
-			if i == len(*sli)-1 {
+			if i == len(test)-1 {
 				return true
 			}
 		}
 	}
-	return false
+
+	(*index)++
+	if *index == len(*sli) {
+		return false
+	}
+
+	return checkIsSafe(sli, index)
 }
