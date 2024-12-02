@@ -33,10 +33,10 @@ func main() {
 		m[value]++
 	}
 
-  similarity := 0
-  for _, value := range leftSli {
-    similarity += value * m[value]
-  }
+	similarity := 0
+	for _, value := range leftSli {
+		similarity += value * m[value]
+	}
 
 	fmt.Println(similarity)
 }
