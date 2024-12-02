@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -15,7 +14,6 @@ func main() {
 
 	reader := bufio.NewReader(file)
 
-	similarity := 0
 	leftSli := make([]int, 0)
 	rightSli := make([]int, 0)
 	for {
@@ -30,18 +28,15 @@ func main() {
 		rightSli = append(rightSli, right)
 	}
 
-	sort.Ints(leftSli)
-	sort.Ints(rightSli)
-
-	for _, v := range leftSli {
-		index := sort.SearchInts(rightSli, v)
-		count := 0
-		for index < len(rightSli) && rightSli[index] == v {
-			count++
-			index++
-		}
-		similarity += v * count
+	m := make(map[int]int)
+	for _, value := range rightSli {
+		m[value]++
 	}
+
+  similarity := 0
+  for _, value := range leftSli {
+    similarity += value * m[value]
+  }
 
 	fmt.Println(similarity)
 }
