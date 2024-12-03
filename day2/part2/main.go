@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	file, _ := os.Open("input.txt")
+	file, _ := os.Open("../input.txt")
 	reader := bufio.NewReader(file)
 
 	safe := 0
@@ -20,8 +20,8 @@ func main() {
 			break
 		}
 
-		sli := strings.Fields(line)
 		intSli := make([]int, 0)
+		sli := strings.Fields(line)
 		for _, v := range sli {
 			intV, _ := strconv.Atoi(v)
 			intSli = append(intSli, intV)
@@ -35,13 +35,6 @@ func main() {
 	fmt.Println(safe)
 }
 
-func abs(x, y int) int {
-	if x > y {
-		return x - y
-	}
-	return y - x
-}
-
 func checkIsSafe(sli *[]int, index *int) bool {
 	test := make([]int, len(*sli))
 	_ = copy(test, *sli)
@@ -52,16 +45,8 @@ func checkIsSafe(sli *[]int, index *int) bool {
 	})
 	isAsc := sort.IntsAreSorted(test)
 
-	if isAsc || isDesc {
-		for i := 1; i < len(test); i++ {
-			distance := abs(test[i-1], test[i])
-			if distance < 1 || distance > 3 {
-				break
-			}
-			if i == len(test)-1 {
-				return true
-			}
-		}
+	if (isAsc || isDesc) && checkDistance(&test) {
+		return true
 	}
 
 	(*index)++
@@ -70,4 +55,21 @@ func checkIsSafe(sli *[]int, index *int) bool {
 	}
 
 	return checkIsSafe(sli, index)
+}
+
+func checkDistance(sli *[]int) bool {
+	for i := 1; i < len(*sli); i++ {
+		distance := abs((*sli)[i-1], (*sli)[i])
+		if distance < 1 || distance > 3 {
+			return false
+		}
+	}
+	return true
+}
+
+func abs(x, y int) int {
+	if x > y {
+		return x - y
+	}
+	return y - x
 }
