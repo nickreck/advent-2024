@@ -11,25 +11,15 @@ func main() {
 	content, _ := os.ReadFile("../input.txt")
 	str := string(content)
 
-	re := regexp.MustCompile("((mul\\()\\d+,\\d+\\))|don't\\(\\)|do\\(\\)")
-	matches := re.FindAllString(str, -1)
+	re := regexp.MustCompile(`(?s)don't\(\).*?do\(\)`)
+	str = re.ReplaceAllString(str, "-")
 
-	re = regexp.MustCompile("\\d+")
+	re = regexp.MustCompile(`((mul\()\d+,\d+\))`)
+  matches := re.FindAllString(str, -1)
+
+	re = regexp.MustCompile(`\d+`)
 	sum := 0
-	active := true
 	for _, v := range matches {
-		if v == "don't()" {
-			active = false
-			continue
-		} else if v == "do()" {
-			active = true
-			continue
-		}
-
-		if !active {
-			continue
-		}
-
 		sli := re.FindAllString(v, -1)
 		x, _ := strconv.Atoi(sli[0])
 		y, _ := strconv.Atoi(sli[1])
