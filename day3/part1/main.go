@@ -11,10 +11,10 @@ func main() {
 	content, _ := os.ReadFile("../input.txt")
 	str := string(content)
 
-	re := regexp.MustCompile("(mul\\()[0-9]+,[0-9]+\\)")
+	re := regexp.MustCompile("(mul\\()\\d+,\\d+\\)")
 	matches := re.FindAllString(str, -1)
 
-	re = regexp.MustCompile("[0-9]+")
+	re = regexp.MustCompile("\\d+")
 	sum := 0
 	for _, v := range matches {
 		sli := re.FindAllString(v, -1)
