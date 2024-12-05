@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func main() {
+func part2() {
 	file, _ := os.Open("input.txt")
 	defer file.Close()
 

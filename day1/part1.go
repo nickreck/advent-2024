@@ -9,7 +9,7 @@ import (
   "strings"
 )
 
-func main() {
+func part1() {
   file, _ := os.Open("input.txt")
   defer file.Close()
   //test

@@ -7,8 +7,7 @@ import (
 )
 
 func part2() {
-	file, err := os.Open("../input.txt")
-	fmt.Println(err)
+	file, _ := os.Open("input.txt")
 	reader := bufio.NewReader(file)
 	puzzle := make([][]rune, 0)
 	for {

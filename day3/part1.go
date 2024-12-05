@@ -7,8 +7,8 @@ import (
 	"strconv"
 )
 
-func main() {
-	content, _ := os.ReadFile("../input.txt")
+func part1() {
+	content, _ := os.ReadFile("input.txt")
 	str := string(content)
 
 	re := regexp.MustCompile("(mul\\()\\d+,\\d+\\)")

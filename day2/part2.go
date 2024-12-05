@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-func main() {
-	file, _ := os.Open("../input.txt")
+func part2() {
+	file, _ := os.Open("input.txt")
 	reader := bufio.NewReader(file)
 
 	safe := 0
@@ -65,11 +65,4 @@ func checkDistance(sli *[]int) bool {
 		}
 	}
 	return true
-}
-
-func abs(x, y int) int {
-	if x > y {
-		return x - y
-	}
-	return y - x
 }
