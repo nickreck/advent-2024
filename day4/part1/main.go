@@ -4,12 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"time"
 )
 
 func main() {
-	start := time.Now().UnixNano()
-
 	file, _ := os.Open("../input.txt")
 	reader := bufio.NewReader(file)
 	puzzle := make([]string, 0)
@@ -53,10 +50,7 @@ func main() {
 			}
 		}
 	}
-
-	end := time.Now().UnixNano()
 	fmt.Println(sum)
-	fmt.Println(end - start)
 }
 
 func findChristmas(puzzle []string, r, c, dr, dc, index int) int {
