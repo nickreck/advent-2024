@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func main() {
+func part2() {
 	file, err := os.Open("../input.txt")
 	fmt.Println(err)
 	reader := bufio.NewReader(file)
@@ -39,16 +39,4 @@ func main() {
 		}
 	}
 	fmt.Println(sum)
-}
-
-func findChristmas(puzzle []string, r, c, dr, dc, index int) int {
-	key := []rune{'X', 'M', 'A', 'S'}
-	char := []rune(puzzle[c])
-	if char[r] != key[index] {
-		return 0
-	} else if index == 3 {
-		return 1
-	}
-	index++
-	return findChristmas(puzzle, r+dr, c+dc, dr, dc, index)
 }
