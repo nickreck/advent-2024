@@ -15,19 +15,19 @@ func part1() {
 	col := guardPos % (len(pathMap[0]) + 1)
 
 	count := 1
-	tryMoving(row, col, &count, &pathMap)
+	tryMoving(row, col, &count, pathMap)
 
 	fmt.Println(count)
 }
 
-func putAnX(row, col int, arr *[]string) {
-	str := []byte((*arr)[row])
+func putAnX(row, col int, arr []string) {
+	str := []byte(arr[row])
 	str[col] = 'X'
-	(*arr)[row] = string(str)
+	arr[row] = string(str)
 }
 
-func tryMoving(row, col int, int *int, arr *[]string) {
-	cur := (*arr)[row][col]
+func tryMoving(row, col int, int *int, arr []string) {
+	cur := arr[row][col]
 	r, c, safe := isSafeMove(cur, row, col, arr)
 	if !safe && inArea(r, c, arr) {
 		directions := []byte{'^', '>', 'v', '<'}
@@ -45,21 +45,21 @@ func tryMoving(row, col int, int *int, arr *[]string) {
 	} else if !safe {
 		return
 	}
-  if (*arr)[r][c] != 'X' {
-    (*int)++
-  }
+	if arr[r][c] != 'X' {
+		(*int)++
+	}
 	putAnX(row, col, arr)
 	putAChar(r, c, arr, cur)
 	tryMoving(r, c, int, arr)
 }
 
-func putAChar(row, col int, arr *[]string, x byte) {
-	str := []byte((*arr)[row])
+func putAChar(row, col int, arr []string, x byte) {
+	str := []byte(arr[row])
 	str[col] = x
-	(*arr)[row] = string(str)
+	arr[row] = string(str)
 }
 
-func isSafeMove(char byte, r, c int, arr *[]string) (int, int, bool) {
+func isSafeMove(char byte, r, c int, arr []string) (int, int, bool) {
 	if char == '^' {
 		r--
 	} else if char == '>' {
@@ -70,9 +70,9 @@ func isSafeMove(char byte, r, c int, arr *[]string) (int, int, bool) {
 		r++
 	}
 
-	return r, c, inArea(r, c, arr) && (*arr)[r][c] != '#'
+	return r, c, inArea(r, c, arr) && arr[r][c] != '#'
 }
 
-func inArea(r, c int, arr *[]string) bool {
-	return r >= 0 && r < len(*arr) && c >= 0 && c < len(*arr)
+func inArea(r, c int, arr []string) bool {
+	return r >= 0 && r < len(arr) && c >= 0 && c < len(arr)
 }
