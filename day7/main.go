@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -28,29 +29,67 @@ func main() {
 		}
 	}
 
+	base2, base3 := findSum(m)
+
+	fmt.Println(base2)
+	fmt.Println(base3)
+}
+
+func findSum(m map[int][][]int) (int, int) {
 	sum := 0
+	base3Sum := 0
 	for k, v := range m {
 		for _, integers := range v {
-			for i := 0; i < (1 << (len(integers) - 1)); i++ {
-				str := fmt.Sprintf("%0*b", len(integers)-1, i)
-				total := integers[0]
-				for ci, c := range str {
-					if c == '0' {
-						total *= integers[ci+1]
-					} else {
-						total += integers[ci+1]
-					}
-
-					if total > k {
-						break
-					}
-				}
-				if total == k {
-					sum += total
-					break
-				}
-			}
+			bitwise(k, &sum, integers)
+			base3(k, &base3Sum, integers)
 		}
 	}
-	fmt.Println(sum)
+	return sum, base3Sum
+}
+
+func base3(k int, sum *int, integers []int) {
+	for i := 0; i < (int(math.Pow(float64(3), float64(len(integers)-1)))); i++ {
+    numStr := strconv.FormatInt(int64(i), 3)
+    str := fmt.Sprintf("%*s", len(integers)-1, numStr)
+		total := integers[0]
+		for ci, c := range str {
+			if c == '0' || c == ' ' {
+				total *= integers[ci+1]
+			} else if c == '1' {
+				total += integers[ci+1]
+			} else {
+        total, _ = strconv.Atoi(fmt.Sprintf("%d%d", total, integers[ci+1]))
+      }
+
+			if total > k {
+				break
+			}
+		}
+		if total == k {
+			*sum += total
+			break
+		}
+	}
+}
+
+func bitwise(k int, sum *int, integers []int) {
+	for i := 0; i < (1 << (len(integers) - 1)); i++ {
+		str := fmt.Sprintf("%0*b", len(integers)-1, i)
+		total := integers[0]
+		for ci, c := range str {
+			if c == '0' {
+				total *= integers[ci+1]
+			} else {
+				total += integers[ci+1]
+			}
+
+			if total > k {
+				break
+			}
+		}
+		if total == k {
+			*sum += total
+			break
+		}
+	}
 }
