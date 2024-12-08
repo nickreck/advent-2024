@@ -54,7 +54,7 @@ func base3(k int, sum *int, integers []int) {
 	for i := 0; i < (int(math.Pow(float64(3), float64(len(integers)-1)))); i++ {
 		numStr := strconv.FormatInt(int64(i), 3)
 		str := fmt.Sprintf("%*s", len(integers)-1, numStr)
-    total := checkRules(k, integers, str)
+		total := checkRules(k, integers, str)
 		if total == integers[0] {
 			*sum += k
 			break
@@ -63,14 +63,14 @@ func base3(k int, sum *int, integers []int) {
 }
 
 func bitwise(k int, sum *int, integers []int) {
-  for i := 0; i < (1 << (len(integers) - 1)); i++ {
-    str := fmt.Sprintf("%0*b", len(integers)-1, i)
-    total := checkRules(k, integers, str)
-    if total == integers[0] {
-      *sum += k
-      break
-    }
-  }
+	for i := 0; i < (1 << (len(integers) - 1)); i++ {
+		str := fmt.Sprintf("%0*b", len(integers)-1, i)
+		total := checkRules(k, integers, str)
+		if total == integers[0] {
+			*sum += k
+			break
+		}
+	}
 }
 
 func checkRules(k int, integers []int, str string) int {
@@ -113,13 +113,13 @@ layerFor:
 }
 
 func intLen(i int) int {
-  if i == 0 {
-    return 1
-  }
-  count := 0
-  for i != 0 {
-    i /= 10
-    count++
-  }
-  return count
+	if i == 0 {
+		return 1
+	}
+	count := 0
+	for i != 0 {
+		i /= 10
+		count++
+	}
+	return count
 }
