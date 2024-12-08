@@ -6,7 +6,10 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
+
+var lock = sync.RWMutex{}
 
 func main() {
 	input, _ := os.ReadFile("input.txt")
@@ -51,76 +54,72 @@ func base3(k int, sum *int, integers []int) {
 	for i := 0; i < (int(math.Pow(float64(3), float64(len(integers)-1)))); i++ {
 		numStr := strconv.FormatInt(int64(i), 3)
 		str := fmt.Sprintf("%*s", len(integers)-1, numStr)
-		total := k
-		for j := len(str) - 1; j >= 0; j-- {
-			if str[j] == '0' || str[j] == ' ' {
-				if total%integers[j+1] != 0 {
-					break
-				}
-				total /= integers[j+1]
-			} else if str[j] == '1' {
-				total -= integers[j+1]
-			} else {
-				hold := strconv.Itoa(total)
-				hL := len(hold)
-				iL := intLen(integers[j+1])
-				if hL < iL {
-					break
-				}
-				hold = hold[hL-iL:]
-				check, _ := strconv.Atoi(hold)
-				if check != integers[j+1] {
-					break
-				}
-				hold = strconv.Itoa(total)
-				hold = hold[:len(hold)-intLen(integers[j+1])]
-				total, _ = strconv.Atoi(hold)
-			}
-
-			if total < 0 {
-				break
-			}
-		}
+    total := checkRules(k, integers, str)
 		if total == integers[0] {
 			*sum += k
 			break
 		}
 	}
-}
-
-func intLen(i int) int {
-	if i == 0 {
-		return 1
-	}
-	count := 0
-	for i != 0 {
-		i /= 10
-		count++
-	}
-	return count
 }
 
 func bitwise(k int, sum *int, integers []int) {
-	for i := 0; i < (1 << (len(integers) - 1)); i++ {
-		str := fmt.Sprintf("%0*b", len(integers)-1, i)
-		total := k
-		for j := len(str) - 1; j >= 0; j-- {
-			if str[j] == '0' {
-				if total%integers[j+1] != 0 {
-					break
-				}
-				total /= integers[j+1]
-			} else {
-				total -= integers[j+1]
-			}
+  for i := 0; i < (1 << (len(integers) - 1)); i++ {
+    str := fmt.Sprintf("%0*b", len(integers)-1, i)
+    total := checkRules(k, integers, str)
+    if total == integers[0] {
+      *sum += k
+      break
+    }
+  }
+}
 
-			if total < 0 {
-				break
+func checkRules(k int, integers []int, str string) int {
+	total := k
+layerFor:
+	for j := len(str) - 1; j >= 0; j-- {
+		switch str[j] {
+		case '0', ' ':
+			if total%integers[j+1] != 0 {
+				break layerFor
 			}
+			total /= integers[j+1]
+			break
+		case '1':
+			total -= integers[j+1]
+			break
+		case '2':
+			hold := strconv.Itoa(total)
+			hL := len(hold)
+			iL := intLen(integers[j+1])
+			if hL < iL {
+				break layerFor
+			}
+			hold = hold[hL-iL:]
+			check, _ := strconv.Atoi(hold)
+			if check != integers[j+1] {
+				break layerFor
+			}
+			hold = strconv.Itoa(total)
+			hold = hold[:len(hold)-intLen(integers[j+1])]
+			total, _ = strconv.Atoi(hold)
+			break
 		}
-		if total == integers[0] {
-			*sum += k
+
+		if total < 0 {
 			break
 		}
 	}
+	return total
+}
+
+func intLen(i int) int {
+  if i == 0 {
+    return 1
+  }
+  count := 0
+  for i != 0 {
+    i /= 10
+    count++
+  }
+  return count
 }
