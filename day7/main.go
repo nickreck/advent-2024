@@ -6,10 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"sync"
 )
-
-var lock = sync.RWMutex{}
 
 func main() {
 	input, _ := os.ReadFile("input.txt")
