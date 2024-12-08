@@ -49,46 +49,77 @@ func findSum(m map[int][][]int) (int, int) {
 
 func base3(k int, sum *int, integers []int) {
 	for i := 0; i < (int(math.Pow(float64(3), float64(len(integers)-1)))); i++ {
-    numStr := strconv.FormatInt(int64(i), 3)
-    str := fmt.Sprintf("%*s", len(integers)-1, numStr)
-		total := integers[0]
-		for ci, c := range str {
-			if c == '0' || c == ' ' {
-				total *= integers[ci+1]
-			} else if c == '1' {
-				total += integers[ci+1]
+		numStr := strconv.FormatInt(int64(i), 3)
+		str := fmt.Sprintf("%*s", len(integers)-1, numStr)
+		total := k
+		for j := len(str) - 1; j >= 0; j-- {
+			if str[j] == '0' || str[j] == ' ' {
+				if total%integers[j+1] != 0 {
+					break
+				}
+				total /= integers[j+1]
+			} else if str[j] == '1' {
+				total -= integers[j+1]
 			} else {
-        total, _ = strconv.Atoi(fmt.Sprintf("%d%d", total, integers[ci+1]))
-      }
+				hold := strconv.Itoa(total)
+				hL := len(hold)
+				iL := intLen(integers[j+1])
+				if hL < iL {
+					break
+				}
+				hold = hold[hL-iL:]
+				check, _ := strconv.Atoi(hold)
+				if check != integers[j+1] {
+					break
+				}
+				hold = strconv.Itoa(total)
+				hold = hold[:len(hold)-intLen(integers[j+1])]
+				total, _ = strconv.Atoi(hold)
+			}
 
-			if total > k {
+			if total < 0 {
 				break
 			}
 		}
-		if total == k {
-			*sum += total
+		if total == integers[0] {
+			*sum += k
 			break
 		}
 	}
 }
 
+func intLen(i int) int {
+	if i == 0 {
+		return 1
+	}
+	count := 0
+	for i != 0 {
+		i /= 10
+		count++
+	}
+	return count
+}
+
 func bitwise(k int, sum *int, integers []int) {
 	for i := 0; i < (1 << (len(integers) - 1)); i++ {
 		str := fmt.Sprintf("%0*b", len(integers)-1, i)
-		total := integers[0]
-		for ci, c := range str {
-			if c == '0' {
-				total *= integers[ci+1]
+		total := k
+		for j := len(str) - 1; j >= 0; j-- {
+			if str[j] == '0' {
+				if total%integers[j+1] != 0 {
+					break
+				}
+				total /= integers[j+1]
 			} else {
-				total += integers[ci+1]
+				total -= integers[j+1]
 			}
 
-			if total > k {
+			if total < 0 {
 				break
 			}
 		}
-		if total == k {
-			*sum += total
+		if total == integers[0] {
+			*sum += k
 			break
 		}
 	}
