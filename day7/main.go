@@ -38,9 +38,7 @@ func main() {
 
 func findSum(m map[int][][]int) (int, int) {
 	base2Chan := make(chan int)
-	base2Sum := 0
 	base3Chan := make(chan int)
-	base3Sum := 0
 	wg1 := &sync.WaitGroup{}
 	wg2 := &sync.WaitGroup{}
 	for k, v := range m {
@@ -61,6 +59,8 @@ func findSum(m map[int][][]int) (int, int) {
 		wg2.Wait()
 	}()
 
+	base2Sum := 0
+	base3Sum := 0
 	for i := range base3Chan {
 		base3Sum += i
 	}
