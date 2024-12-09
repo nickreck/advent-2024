@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 func main() {
@@ -36,35 +37,59 @@ func main() {
 }
 
 func findSum(m map[int][][]int) (int, int) {
-	sum := 0
+	base2Chan := make(chan int)
+	base2Sum := 0
+	base3Chan := make(chan int)
 	base3Sum := 0
+	wg1 := &sync.WaitGroup{}
+	wg2 := &sync.WaitGroup{}
 	for k, v := range m {
 		for _, integers := range v {
-			bitwise(k, &sum, integers)
-			base3(k, &base3Sum, integers)
+			wg1.Add(1)
+			go bitwise(wg1, k, base2Chan, integers)
+			wg2.Add(1)
+			go base3(wg2, k, base3Chan, integers)
 		}
 	}
-	return sum, base3Sum
+
+	go func() {
+		defer close(base2Chan)
+		wg1.Wait()
+	}()
+	go func() {
+		defer close(base3Chan)
+		wg2.Wait()
+	}()
+
+	for i := range base3Chan {
+		base3Sum += i
+	}
+	for i := range base2Chan {
+		base2Sum += i
+	}
+	return base2Sum, base3Sum
 }
 
-func base3(k int, sum *int, integers []int) {
+func base3(wg *sync.WaitGroup, k int, c chan int, integers []int) {
+	defer wg.Done()
 	for i := 0; i < (int(math.Pow(float64(3), float64(len(integers)-1)))); i++ {
 		numStr := strconv.FormatInt(int64(i), 3)
 		str := fmt.Sprintf("%*s", len(integers)-1, numStr)
 		total := checkRules(k, integers, str)
 		if total == integers[0] {
-			*sum += k
+			c <- k
 			break
 		}
 	}
 }
 
-func bitwise(k int, sum *int, integers []int) {
+func bitwise(wg *sync.WaitGroup, k int, c chan int, integers []int) {
+	defer wg.Done()
 	for i := 0; i < (1 << (len(integers) - 1)); i++ {
 		str := fmt.Sprintf("%0*b", len(integers)-1, i)
 		total := checkRules(k, integers, str)
 		if total == integers[0] {
-			*sum += k
+			c <- k
 			break
 		}
 	}
