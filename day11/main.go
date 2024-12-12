@@ -14,13 +14,13 @@ func main() {
 	flag.Parse()
 
 	rocks := loadData()
-	blink(rocks, *n)
-	blink(rocks, *n2)
+	m := make(map[node]int)
+	blink(rocks, *n, m)
+	blink(rocks, *n2, m)
 }
 
-func blink(rocks []int, n int) {
+func blink(rocks []int, n int, m map[node]int) {
 	sum := 0
-	m := make(map[node]int)
 	for _, v := range rocks {
 		sum += applyRule(v, n, m)
 	}
