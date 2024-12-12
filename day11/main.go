@@ -6,17 +6,24 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
-	n := flag.Int("part1", 0, "Number of blinks for part 1")
-	n2 := flag.Int("part2", 0, "Number of blinks for part 1")
+	n := flag.Int("part1", 25, "Number of blinks for part 1")
+	n2 := flag.Int("part2", 75, "Number of blinks for part 1")
 	flag.Parse()
 
 	rocks := loadData()
 	m := make(map[node]int)
+  start := time.Now().Nanosecond()
 	blink(rocks, *n, m)
+  end := time.Now().Nanosecond()
+  fmt.Printf("Part 1: %d\n", end - start)
+  start = time.Now().Nanosecond()
 	blink(rocks, *n2, m)
+  end = time.Now().Nanosecond()
+  fmt.Printf("Part 2: %d\n", end - start)
 }
 
 func blink(rocks []int, n int, m map[node]int) {
